@@ -68,7 +68,7 @@ export default function Home() {
   }, [localStream, remoteStream]);
 
   const createPeerConnection = useCallback((peerId: string) => {
-    const peerConnection = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+    const peerConnection = new RTCPeerConnection({ iceServers: [{ urls: process.env.NEXT_PUBLIC_STUN_SERVER_URL! }] });
     peerConnection.onicecandidate = (event) => {
       if (event.candidate && socket) {
         socket.emit("ice-candidate", { target: peerId, candidate: event.candidate });
@@ -195,7 +195,7 @@ export default function Home() {
     <div className="min-h-screen bg-black text-gray-200 flex flex-col items-center justify-center p-4 overflow-hidden">
       {notification && <Notification message={notification.message} type={notification.type} />}
       <main className="w-full max-w-7xl mx-auto flex flex-col items-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white tracking-wider">TensorGo Assignment</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white tracking-wider">P2P Video Call</h1>
         
         {!localStream ? (
           <div className="flex flex-col items-center gap-4 bg-gray-900 p-8 rounded-xl shadow-2xl mt-8">

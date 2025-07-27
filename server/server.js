@@ -14,7 +14,7 @@ const io = new Server(server, {
 });
 
 app.get("/", (req, res) => {
-  res.send("Signaling server is running.");
+  res.status(200).send("Signaling server is running.");
 });
 
 io.on("connection", (socket) => {
