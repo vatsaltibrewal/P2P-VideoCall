@@ -1,5 +1,7 @@
 # Real-Time Video Streaming Web App with WebRTC
 
+![Logo](frontend/public/logo.png)
+
 This project is a modern, real-time, peer-to-peer (P2P) video and audio streaming application built with Next.js, React, and WebRTC. It allows users to connect in a "room" using a unique ID and engage in a live video call, featuring a dynamic UI and media controls similar to professional video conferencing applications.
 
 ---

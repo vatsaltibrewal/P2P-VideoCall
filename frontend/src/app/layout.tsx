@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "P2P Video Call",
   description: "This is a real-time video chat application built with Next.js and Socket.IO.",
+  icons: {
+    icon: { url: '/logo.png' },
+  }
 };
 
 export default function RootLayout({
