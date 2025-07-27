@@ -41,6 +41,9 @@ export default function Home() {
   const pc = useRef<RTCPeerConnection | null>(null);
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  const [iceServers, setIceServers] = useState<RTCIceServer[]>([
+    { urls: 'stun:stun.l.google.com:19302' }
+  ]);
 
   useEffect(() => {
     if (notification) {
@@ -58,6 +61,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    async function loadIceServers() {
+      try {
+        const res = await fetch(
+          `https://${process.env.NEXT_PUBLIC_METERED_APPNAME}.metered.live/api/v1/turn/credentials?apiKey=${process.env.NEXT_PUBLIC_TURN_API_KEY}`
+        );
+        if (!res.ok) throw new Error('Failed to fetch TURN servers');
+        const fetched = await res.json();
+        setIceServers(fetched);
+      } catch (err) {
+        console.error('Error loading ICE servers:', err);
+      }
+    }
+    loadIceServers();
+  }, []);
+
+  useEffect(() => {
     if (localVideoRef.current && localStream) {
       localVideoRef.current.srcObject = localStream;
     }
@@ -68,7 +87,7 @@ export default function Home() {
   }, [localStream, remoteStream]);
 
   const createPeerConnection = useCallback((peerId: string) => {
-    const peerConnection = new RTCPeerConnection({ iceServers: [{ urls: process.env.NEXT_PUBLIC_STUN_SERVER_URL! }] });
+    const peerConnection = new RTCPeerConnection({ iceServers });
     peerConnection.onicecandidate = (event) => {
       if (event.candidate && socket) {
         socket.emit("ice-candidate", { target: peerId, candidate: event.candidate });
